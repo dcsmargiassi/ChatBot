@@ -1,13 +1,13 @@
 import os
 import discord
+from discord.ext import commands
 from dotenv import load_dotenv
-
+import translate
+import botCommands
 load_dotenv()
 token = os.getenv('TOKEN')
-
 intents = discord.Intents.default()
 intents.message_content = True
-
 class DevPSUBot(discord.Client):
     async def on_ready(self):
         print("logged on!")
@@ -27,6 +27,15 @@ class DevPSUBot(discord.Client):
             print("react command recognized")
             await message.add_reaction("👍")
             await message.add_reaction("👽")
+        # Implementation of google translate feature
+        if "translate" in message.content.lower():
+            print("command recognized: translate")
+            #await message.channel.send()
+        # Implementation of commands
+     #   bot = commands.Bot(command_prefix='!', intents=intents)
+        # Have it pass into the class "Commands" if the prefix is found
+
+
 
     
     async def on_typing(self, channel, user, when):
