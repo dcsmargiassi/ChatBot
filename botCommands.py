@@ -1,8 +1,10 @@
 import os
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 #from google import search
-from googleapiclient.discovery import build
+#from googleapiclient.discovery import build
+##Cost $0.005 per google search
 # Start of commands file
 # Command prefix (!)
 # List of current commands w/description
@@ -28,11 +30,26 @@ async def help(ctx):
   inline = False
  )
  embed.add_field(
+  name = 'translate',
+  value = 'Command Format: Directly type into chat "translate <your text> to <language>\n Type <!languagekeys>" to find a list of all valid language keys!',
+  inline = False
+ )
+ embed.add_field(
+  name = '!languagekeys',
+  value = 'Display a list of all valid translation languages.',
+  inline = False
+ )
+ embed.add_field(
+  name = '!languagekeys',
+  value = 'Display a list of all valid translation languages.',
+  inline = False
+ )
+ embed.add_field(
   name = '!search <URL>',
   value = 'Search for a video using the provided URL link',
   inline = False
  )
- #embed.set_thumbnail(url='')
+ embed.set_thumbnail(url='')
  await ctx.send(embed=embed)
 
 @DevPSUBot.command()
@@ -49,5 +66,6 @@ async def search(ctx, arg = None):
   await ctx.send(f'Please provide a URL')
  #Implement code using google api to search google for the video play it in the chat thorugh an embeded response.
 
-token = os.getenv('TOKEN')
-DevPSUBot.run(token)
+#load_dotenv()
+#token = os.getenv('TOKEN')
+#DevPSUBot.run(token)

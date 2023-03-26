@@ -16,8 +16,7 @@ def get_location(name):
         lst = data['loc'].split(',')
         
         return tuple(lst)
-
-
+    
     else:
         loc = Nominatim(user_agent="GetLoc")
 
@@ -68,7 +67,7 @@ def find_places_nearby(location, search_string, preference):
         return 'invalid preference'
 
     #return response
-#create final_list to store the results systematically
+    #create final_list to store the results systematically
     final_list = {}
 
     #extend the list with results and retrive desired results
@@ -80,7 +79,7 @@ def find_places_nearby(location, search_string, preference):
     for i in range(5):
         final_list[blist[i]["name"]] = blist[i]["rating"]
 
-        response = map_client.place(
+        response = map_client.place(#look at documentation to add more features i.e address
             place_id=blist[i]["place_id"],
             fields=['international_phone_number']
         )
@@ -98,4 +97,14 @@ def find_places_nearby(location, search_string, preference):
     else:
         result_string += "near"
         
-    return response
+    if location == "me":
+        result_string = result_string + " " + "you" + " " + "are: \n" 
+    else:
+        result_string = result_string + " " + location + " " + "are: \n"
+        
+    i = 1
+    for place in final_list.keys():
+            result_string += str(i) + ", " + place + ", " + "Phone: " + final_list[place][0] + ", " + "Rating: " + str(final_list[place][1]) + ".\n"
+            i += 1
+    return result_string
+print(find_places_nearby('Boston', 'Museum', 'popularity'))

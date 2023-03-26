@@ -1,6 +1,9 @@
 import os
 import discord
 import translate
+import botCommands
+import places
+#from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,10 +31,10 @@ class DevPSUBot(discord.Client):
             print("react command recognized")
             await message.add_reaction("👍")
             await message.add_reaction("👽")
-
-#Transalate.
-
-        
+        if message.content[0] == "!":
+            print("Built-in command recognized!")
+            await message.send(botCommands(message))
+        #Transalate.
         if 'translate' in message.content.lower():
             message_list = message.content.split()
             i = 1
@@ -55,10 +58,42 @@ class DevPSUBot(discord.Client):
             
                 await message.channel.send(translate.translator_func(msg))
 
+        if 'find' in message.content.lower():
+            #find (search string) (verb) (location) 
+            message_list = message.content.lower().split()
             
-    async def on_typing(self, channel, user, when):
-        print(f"{user} is typing in {channel} at {when}")
-        await channel.send(f"i see you typing, {user}")
+            index = message_list.index("find")
+            #set search string
+            search_string = ""
+            index += 1
+            while message_list[index] != "near" and message_list[index] != "in":
+                search_string = search_string + message_list[index]
+                index += 1
+            
+            #set preference
+            if message_list[index] == "near":
+                preference = "distance"
+                preference = "popularity"
+                index += 1
+                    
+            #Set location
+            location = ""
+            while index < len(message_list):
+                if index != len(message_list) - 1:
+                    location += message_list[index] + " "
+                    index += 1
+                else:
+                    location += message_list[index]
+                    index += 1
+            await message.channel.send(places.find_places_nearby(location, search_string, preference))
+        
     
+        #async def on_typing(self, channel, user, when):
+        #    print(f"{user} is typing in {channel} at {when}")
+        #    await channel.send(f"i see you typing, {user}")
+        
+        
+    
+
 client = DevPSUBot(intents=intents)
 client.run(token)
